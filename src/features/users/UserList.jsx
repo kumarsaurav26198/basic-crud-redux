@@ -1,5 +1,6 @@
-import { fetchUsers, userDeleted } from "./usersSlice";
+import { fetchUsers, userDeleted, userView } from "./usersSlice";
 import { useDispatch, useSelector } from "react-redux";
+import Avatar from "@mui/material/Avatar";
 
 import { Link } from "react-router-dom";
 
@@ -12,7 +13,9 @@ export function UserList() {
   const handleDelete = (id) => {
     dispatch(userDeleted({ id }));
   };
-
+  const handleView = (id) => {
+    dispatch(userView({ id }));
+  };
   return (
     <div className="container">
       <div className="row">
@@ -41,26 +44,45 @@ export function UserList() {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>FirstName</th>
+                <th>lastName</th>
                 <th>Email</th>
-                <th>Actions</th>
+                <th>PhoneNumber</th>
+                <th>Password</th>
+                <th>Avatar</th>
+                <th> &nbsp;&nbsp;&nbsp;&nbsp;Actions</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {entities.length &&
-                entities.map(({ id, name, email }, i) => (
-                  <tr key={i}>
-                    <td>{id}</td>
-                    <td>{name}</td>
-                    <td>{email}</td>
-                    <td>
-                      <button onClick={() => handleDelete(id)}>Delete</button>
-                      <Link to={`/edit-user/${id}`}>
-                        <button>Edit</button>
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                entities.map(
+                  (
+                    { id, firstName, lastName, email, phone, password, file },
+                    i
+                  ) => (
+                    <tr key={i}>
+                      <td>{id}</td>
+                      <td>{firstName}</td>
+                      <td>{lastName}</td>
+                      <td>{email}</td>
+                      <td>{phone}</td>
+                      <td>{password}</td>
+                      <Avatar src={file} sx={{ width: 70, height: 70 }} />
+                      <td>
+                        <Link to={`/edit-user/${id}`}>
+                          <button>Edit</button>
+                        </Link>
+                      </td>
+                      <td>
+                        <button onClick={() => handleDelete(id)}>Delete</button>
+                      </td>
+                      <td>
+                        <button onClick={() => handleView(id)}>View</button>
+                      </td>
+                    </tr>
+                  )
+                )}
             </tbody>
           </table>
         )}
